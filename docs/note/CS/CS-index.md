@@ -2,27 +2,7 @@
 # 临时记录
 
 
-## Objective-C type = JavaScript type
-
-```
-Objective-C type |  JavaScript type
---------------------+---------------------
-nil  |  undefined
-NSNull  | null
-NSString |  string
-NSNumber |  number, boolean
-NSDictionary |  Object object
-NSArray  | Array object
-NSDate  |  Date object
-NSBlock (1)  |  Function object (1)
-id (2)  |  Wrapper object (2)
-Class (3) | Constructor object (3)
-```
-
-https://zhuanlan.zhihu.com/p/29663994
-
-
-# 睡眠时间型判别方式
+#### 睡眠时间型判别方式
 
 学术界里广泛使用慕尼黑时间型问卷（Munich ChronoType Questionnaire, MCTQ）来判定个体的时间型。这个问卷挺复杂的，所以姚脑师这里就把关键的部分翻译出来给大家做时间型的判断。
 
@@ -46,7 +26,7 @@ https://zhuanlan.zhihu.com/p/29663994
 
 如果没有工作日和非工作日的作息切换，你的自然睡眠周期（按 8 小时睡眠长度）应该是 00:15 - 8:15。
 
-# 如何在mac上格式化ext3、ext4
+### 如何在mac上格式化ext3、ext4
 
 1. 确认已安装安装 Homebrew，用 `brew install e2fsprogs` 
 2. 插上 U盘，执行 `diskutil list`, 在执行结果中找到 U盘盘符，我这里是 /dev/disk2s1

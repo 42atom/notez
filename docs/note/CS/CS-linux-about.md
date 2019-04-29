@@ -3,21 +3,22 @@
 
 [参考 DO 服务器初始化配置](https://www.digitalocean.com/community/tutorials/initial-server-setup-with-centos-7)
 
-## 用户账号配置
+##### 用户账号配置
 
 安装完之后,即可修改root密码, 修改root 密码  
 `$ sudo passwd root`
 
 `sudo -i` # 切换root, exit 退回
 
-```
-# 配置用户,新增普通用户,并加入wheel组
+##### 配置用户
+新增普通用户paulwan,并加入wheel组
+``` bash
 adduser paulwan
 passwd paulwan
 gpasswd -a paulwan wheel
 ```
 
-## 赋予root权限
+##### 赋予root权限
 
 修改 `vi /etc/sudoers` 文件，找到下面一行， 在root下面添加一行，如下所示：
 
@@ -28,10 +29,10 @@ root ALL=(ALL) ALL paul ALL=(ALL) ALL
 
 修改完毕，现在可以用paul帐号登录，然后用命令 su - ，即可获得root权限进行操作。
 
-## 安装VIM
+##### 安装VIM
 `yum install vim-enhanced`
 
-## SSH与防火墙配置
+##### SSH与防火墙配置
 
 `sudo vi /etc/ssh/sshd_config`
 
@@ -77,7 +78,7 @@ firewall-cmd --list-all
 
 centos7 防火墙参考[相关设置看这里](http://blog.csdn.net/MikeLC7/article/details/73549515)
 
-## Git 安装
+##### Git 安装
 
 ```
 sudo yum install git
@@ -90,7 +91,7 @@ git config --global user.email "**@***.com"  # 设定邮件
 
 [参看内容](https://www.brilliantcode.net/145/centos-7-check-selinux-status-enabled-or-not/)
 
-## 开启SFTP
+##### 开启SFTP
 
 端口一般和SSH一样
 
@@ -136,7 +137,7 @@ drwxr-xr-x 2 sftpuser sftp_group 6 Mar 19 21:15 data
 [参看](https://www.brilliantcode.net/142/centos-7-configure-sftp/)内容
 
 
-## SSR 安装 in CentOS
+##### SSR 安装 in CentOS
 
 SSR 详细安装说明 [参考这里](https://teddysun.com/339.html),.     
 ---- 注意没有设置为开机启动,系统重启后需手动打开
@@ -145,7 +146,7 @@ SSR 详细安装说明 [参考这里](https://teddysun.com/339.html),.
 yum install python-setuptools && easy_install pip
 pip install shadowsocks
 ```
-## 开始SSR后台服务
+##### 开始SSR后台服务
 ```
 sudo ssserver -p 443 -k pass***d -m aes-256-cfb --user nobody -d start
 # 停止 SSR
@@ -156,9 +157,9 @@ firewall-cmd --query-port=443/tcp
 sudo firewall-cmd --zone=public --add-port=443/tcp --permanent
 ```
 
-## nginx 安装
+#### nginx 安装
 
-#### 安装 nginx
+##### 安装 nginx
 参考[CentOS配置 Nginx](http://www.linuxidc.com/Linux/2016-09/134907.htm), 
 以[su]使用root身份;
 
@@ -209,8 +210,7 @@ sudo vim /usr/local/nginx/conf/nginx.conf # 编辑conf文件
 cd /usr/local/nginx/sbin/
 sudo ./nginx -s reload
 ```
-
-##### [nginx服务器绑定域名和设置根目录的方法](http://www.cnblogs.com/freeweb/p/5261077.html)
+ [nginx服务器绑定域名和设置根目录的方法](http://www.cnblogs.com/freeweb/p/5261077.html)
 
 如果出现403错误，需要网站目录给予755权限（含父目录） 
 
@@ -219,13 +219,13 @@ sudo ./nginx -s reload
 
 - error\_log位置\` /var/log/nginx/error.log\`
 
-##### 参考：[来点 Nginx](https://www.v2ex.com/t/387783)
+参考：[来点 Nginx](https://www.v2ex.com/t/387783)
 
 `sudo gpasswd -a nginx wheel` 
 `sudo nginx -s reload`
 
 
-## 配置nginx
+##### 配置nginx
 
 
 保存文件后，输入sudo nginx -t测试我们的配置文件是否有错误，一般错误都是漏个分号，少个字母之类的，错误提示很精确，没错的话会输出下面两句:
@@ -244,7 +244,7 @@ nginx: configuration file /etc/nginx/nginx.conf test is successful
 3.相应的根目录是否有文件。
 
 
-## 修改nginx配置
+##### 修改nginx配置
 首先进入nginx安装目录，然后执行 vim conf/nginx.conf 打开nginx的配置文件:
 
 sudo vim /usr/local/nginx/conf/nginx.conf
@@ -252,7 +252,7 @@ cd /usr/local/nginx/sbin/
 sudo ./nginx -s reload
 
 
-## Node & N 安装
+##### Node & N 安装
 
 ```
 git clone https://github.com/tj/n
@@ -278,7 +278,7 @@ sudo ln -s /usr/local/bin/n /usr/bin/n
 ```
 
 
-## mac 上远程挂载
+##### mac 上远程挂载
 
 1. 安装sshfs： \`brew install sshfs\`
 

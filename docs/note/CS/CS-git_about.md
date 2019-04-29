@@ -1,4 +1,5 @@
-# Git
+
+Git
 1. 在Github创建git仓库;
 
 2. `git init` //初始化本地仓库，当前目录下会出现一个名为 .git 的目录;

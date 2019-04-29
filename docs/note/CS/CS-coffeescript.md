@@ -1,8 +1,224 @@
-# CoffeeScript 风格指南
+coffee snippet
+
+##### 阶乘写法，非尾递归
+
+```coffeescript
+f = (n) ->
+  if n is 1
+    1
+  else
+    n * f(n - 1)
+
+console.log '阶乘 = ' + result = f(6)
+console.log result = 1 * 2 * 3 * 4 * 5 * 6
+```
+##### 汉诺塔样例
+```
+step = 0
+hanoi = (disc, src, aux, dst) ->
+    if disc > 0
+        hanoi(disc - 1, src, dst, aux) #挪动上面的圆盘到辅助柱上
+        step += 1
+        console.log(" Move disc", disc, "from", src, "to", dst) #挪动下面的圆盘到目标柱上
+        hanoi(disc - 1, aux, src, dst) #挪动辅助柱上的圆盘到目标柱上
+    else console.log '汉诺塔步数' + step
+
+# hanoi(3, "Src", "Aux", "Dst")
+
+
+# 多参数样例
+multiPram = (first, second, others...) ->
+ console.log [first, second, others, arguments[2]]
+
+multiPram(1, 2, 3, 4)
+
+# 打印信息类型
+consoleSample = ->
+  console.warn "警告信息"
+  console.error "错误信息"
+  console.info "提示信息"
+
+  # 打印分组信息
+  console.group '第1组'
+  console.log '1-1'
+  console.log '1-2'
+  console.groupEnd()
+
+  console.group '第2组'
+  console.log '2-1'
+
+  # 打印运行时间，包裹执行语句后输出
+  console.time('运行时间是：')
+  for i in [0..10000]
+    tableObj = i
+  console.timeEnd('运行时间是：')
+# consoleSample()
+
+# 如何打印断言，参数1为真时，不会抛出错误，否则抛出错误
+assertFunc = ->
+  return 10
+
+console.assert( assertFunc() is 10, '这里出现问题！')
+
+
+# 链式语法
+linkStyle = {
+  method1: () ->
+    console.log 'method a'
+    return @
+  method2: () ->
+    console.log 'method b'
+    return @
+  method3: () ->
+    console.log 'method c'
+    return @
+}
+# 调用
+linkStyle.method1().method2().method3()
+
+
+# 计数异步执行, await 的使用
+# 异步调用主要解决js里同步执行与回调层次过多的问题，依赖于promise化函数，使用await调用（阻塞执行）；
+# await 是个运算符，取决于等到的东西，如果是promise对象，就会阻塞后面的执行（直到该对象resolve，获取resolved的值），
+# 如果等待到的不是promise对象，那么运算结果就是它等到的东西。函数前面的async一词意味着一个简单的事情：这个函数总是返回一个promise，如果代码中有return <非promise>语句，JavaScript会自动把返回的这个value值包装成promise的resolved值。
+
+# Promise语法
+sleep = (ms) ->
+  new Promise (resolve) ->
+    global.setTimeout(resolve, ms)
+
+countdown = (second) ->
+  for i in [second..1]
+    if i > 5
+      console.time("No.#{i} 计数时间：")
+      await sleep(1000)
+      # console.log "  #{new Date()}"
+      t2 = +new Date()
+      console.timeEnd("No.#{i} 计数时间：")
+    else
+      await sleep(1000)
+      console.log "No.#{i} Count in 1000ms"
+
+countdown 8
+
+# 异步样例 2
+ajax = (t) ->
+  new Promise (resolve) ->
+    global.setTimeout (-> resolve(t + 200)), t
+
+step1 = (t) ->
+  console.log "SUBMIT step1 in #{t}ms"
+  return ajax(t)
+step2 = (t) ->
+  console.log "SUBMIT step2 in #{t}ms"
+  return ajax(t)
+step3 = (t) ->
+  console.log "SUBMIT step3 in #{t}ms"
+  return ajax(t)
+
+submit = () ->
+  console.time('SUBMIT step total')
+  t1 = 0
+  t2 = await step1(t1)
+  t3 = await step2(t2)
+  result = await step3(t3)
+  console.log "SUBMIT result is #{result}ms"
+  console.timeEnd('SUBMIT step total')
+
+submit()
+```
+
+##### 关于call与apply
+
+```coffeescript
+js
+// js apply
+method.apply(this,arguments);
+
+//coffee
+method.apply @, arguments
+//或
+caller: ->
+  @method arguments...
+
+//  caller: function() {
+//   return this.method.apply(this, arguments);
+// }
+```
+
+##### XMLHttpRequest Code Snippets
+
+```coffeescript
+### Post request example POST请求
+# create new request
+xhr = new XMLHttpRequest
+# set HTTP verb and URL
+xhr.open('POST', '', true)
+# define content type as JSON since we are sending a JSON string
+xhr.setRequestHeader('Content-Type', 'application/json');
+# define callback
+xhr.onreadystatechange = () ->
+    if xhr.readyState==4 and xhr.status==200
+    document.write(xhr.responseText)
+
+# send stringified data
+xhr.send(JSON.stringify({
+    "details": ["name"]
+}));
+```
+
+💊 异步函数处理 async,使用NODEJS 时 -coffeeScript 2.0
+
+```
+### 异步函数处理 async,使用NODEJS 时 -coffeeScript 2.0
+# 制造一个 promise， 使用 promise 执行异步
+sleep = (ms) ->
+  new Promise (resolve) ->
+    # nodejs window = global
+    window.setTimeout resolve, ms
+
+countdown = (seconds) ->
+  for i in [seconds..1]
+    console.log "#{i} count"
+    await sleep 1000 # 异步函数测试
+
+countdown 30
+```
+
+
+
+
+
+
+## 在node环境下使用coffee
+
+
+
+方法1:  coffeescript 2 参考 [Coffee官方文档](http://coffeescript.org/#nodejs-usage) 
+
+coffeeScript 1.0 的node  [参考文档](http://www.marcusoft.net/2015/03/node-with-coffeescript-not-a-piece-of-cake.html) 
+
+node模块的coffeescript[ 参考文档](http://nickdesaulniers.github.io/blog/2013/08/28/making-great-node-dot-js-modules-with-coffeescript/)
+
+
+
+方法2: 最简单的用法:
+
+1.`npm install coffeescript`
+
+1. 在package.json里的script 加上`  "start": "coffee index.coffee --nodejs"`, 意味着直接用coffee运行,不用管js;
+
+或者, 使用bash运行:  `coffee -w -c *`**`.coffee` , 然后在package.json里的script 里指定使用编译后的**`***.js`.
+
+coffee2的编译注意可以是ES6.
+
+
+
+## CoffeeScript 风格指南
 
 [参考](https://cnodejs.org/topic/53a64eb1c3ee0b5820b20863)来源
 
-### 代码布局（Code Layout）
+#### 代码布局（Code Layout）
 
 #### Tab 还是 空格？（Tabs or Spaces?）
 
@@ -121,7 +337,7 @@ Backbone = require 'backbone'
          fooBar = 3
     ```
 
-## 注释（Comments）
+#### 注释（Comments）
 
 如果你修改了一段已有注释说明的代码，则也要更新它对应的注释。（理想状态是，重构这段代码直到它不需要注释说明，然后再把之前的注释全删掉。）
 
@@ -129,7 +345,7 @@ Backbone = require 'backbone'
 
 如果注释很短，可以省略末尾的句号。
 
-### 块注释（Block Comments）
+#### 块注释（Block Comments）
 
 注释块通常应用于尾随其后的一段代码。
 
@@ -171,7 +387,7 @@ Backbone = require 'backbone'
   x = x + 1 # 边界补足
 ```
 
-## 命名规范（Naming Conventions）
+#### 命名规范（Naming Conventions）
 
 使用 `小驼峰命名法` （第一个词的首字母小写，后面每个词的首字母大写）来命名所有的变量、方法和对象属性。
 
@@ -191,7 +407,7 @@ CONSTANT_LIKE_THIS
 _privateMethod: ->
 ```
 
-## 函数（Functions）
+#### 函数（Functions）
 
 _（以下这些准则同样适用于类中的方法。）_
 
@@ -260,7 +476,7 @@ foo(4).bar 8
 
 「函数体风格」并不得到推荐。但是， **当它适应一些特殊的项目需求时，还是得用它。**
 
-## 字符串（Strings）
+#### 字符串（Strings）
 
 用字符串插值代替字符串连接符：
 
@@ -271,7 +487,7 @@ foo(4).bar 8
 
 最好用单引号 \(`''`\) 而不是双引号 \(`""`\) 。除非是插入到另一段现有的字符串中（类似字符串插值）。
 
-## 条件判断（Conditionals）
+#### 条件判断（Conditionals）
 
 用 `unless` 来代替 `if` 的否定情况。
 
@@ -305,7 +521,7 @@ foo(4).bar 8
   else ...
 ```
 
-## 循环和列表解析（Looping and Comprehensions）
+####  循环和列表解析（Looping and Comprehensions）
 
 尽可能的使用列表解析：
 
@@ -332,17 +548,17 @@ object = one: 1, two: 2
 alert("#{key} = #{value}") for key, value of object
 ```
 
-## 扩展本地对象（Extending Native Objects）
+### 扩展本地对象（Extending Native Objects）
 
 不要修改本地对象。
 
 比如，不要给 `Array.prototype` 引入 `Array#forEach` 。
 
-## 异常（Exceptions）
+### 异常（Exceptions）
 
 不要抑制异常抛出。
 
-## 注解（Annotations）
+### 注解（Annotations）
 
 必要的时候应该写注解，来指明接下来的代码块具体将干什么。
 
@@ -374,7 +590,7 @@ alert("#{key} = #{value}") for key, value of object
 
 如果你必须自定义一个新的注解类型，则应该把这个注解类型记录在项目的 README 里面。
 
-## 其他（Miscellaneous）
+### 其他（Miscellaneous）
 
 `and` 更优于 `&&`.
 
@@ -421,6 +637,7 @@ console.log args... # 好
 
 (a, b, c, rest...) -> # 好
 ```
+
 
 
 
